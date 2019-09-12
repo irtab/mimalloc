@@ -159,6 +159,9 @@ target_include_directories(mimalloc-static PUBLIC
     $<INSTALL_INTERFACE:${mi_install_dir}/include>
 )
 if(WIN32)
+  # Set debug info to be embedded directly into the static lib
+  target_compile_options(mimalloc-static PRIVATE "/Z7")
+
   # When building both static and shared libraries on Windows, a static library should use a
   # different output name to avoid the conflict with the import library of a shared one.
   string(REPLACE "mimalloc" "mimalloc-static" mi_output_name ${mi_basename})
