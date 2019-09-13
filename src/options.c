@@ -19,7 +19,7 @@ int mi_version(void) mi_attr_noexcept {
 }
 
 #ifdef _WIN32
-#include <conio.h>
+#include <debugapi.h> // for OutputDebugStringA
 #endif
 
 // --------------------------------------------------------
@@ -140,7 +140,8 @@ static void mi_out_stderr(const char* msg) {
   #ifdef _WIN32
   // on windows with redirection, the C runtime cannot handle locale dependent output 
   // after the main thread closes so we use direct console output.
-  _cputs(msg);
+  // HACK[irtab]: use OutputDebugStringA as the default stderr on Windows
+  OutputDebugStringA(msg);
   #else
   fputs(msg, stderr);
   #endif
